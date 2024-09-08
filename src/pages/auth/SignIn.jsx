@@ -5,6 +5,8 @@ import '../../assets/css/styles.css';
 import { Header } from './Header';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserDetails } from '../../redux/slices/userSlice';
 
 const FormControl = ({ type, name, placeholder, register, required = false }) => (
   <Form.Control
@@ -20,13 +22,17 @@ const SignIn = () => {
   const togglePasswordVisibility = () => setShowPassword(prev => !prev);
   const { register: registerSignUp, handleSubmit: handleSubmitSignUp, formState: { errors: errorsSignUp } } = useForm();
   const { register: registerSignIn, handleSubmit: handleSubmitSignIn, formState: { errors: errorsSignIn } } = useForm();
-
+  const dispatch = useDispatch();
+  const {user} = useSelector((state) => state.userDetails);
+  console.log(user,"userDetailsuserDetails")
   const onSignUpSubmit = async (data) => {
     try {
       const apiUrl = process.env.REACT_APP_API_URL;
       const response = await axios.post(`${apiUrl}/api/user`, data);
-      if (response?.data?.token) {
-        localStorage.setItem('token', response.data.token);
+      if (response?.data?.data) {
+        dispatch(setUserDetails(response?.data?.data))
+        // localStorage.setItem('token', response.data.token);
+
       }
       console.log('Sign Up Response:', response.data.token);
     } catch (error) {
@@ -38,11 +44,14 @@ const SignIn = () => {
     console.log('Sign In Data:', data);
   };
 
+
   return (
     <Container className="mt-5">
       <Header />
       <Row className="justify-content-center">
         {/* Sign Up Form */}
+
+        {user?.name||""}
         <Col md={5} className="p-4 shadow bg-white rounded mx-5" style={{ position: 'relative' }}>
           <h3 className="mb-4 text-center">Sign Up</h3>
           <Form onSubmit={handleSubmitSignUp(onSignUpSubmit)}>

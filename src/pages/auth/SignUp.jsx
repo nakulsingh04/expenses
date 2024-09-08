@@ -5,6 +5,7 @@ import '../../assets/css/styles.css';
 import { Header } from './Header';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const FormControl = ({ type, name, placeholder, register, required = false }) => (
   <Form.Control
@@ -20,7 +21,7 @@ const SignIn = () => {
   const togglePasswordVisibility = () => setShowPassword(prev => !prev);
   const { register: registerSignUp, handleSubmit: handleSubmitSignUp, formState: { errors: errorsSignUp } } = useForm();
   const { register: registerSignIn, handleSubmit: handleSubmitSignIn, formState: { errors: errorsSignIn } } = useForm();
-
+  const {user} = useSelector((state) => state.userDetails);
   const onSignUpSubmit = async (data) => {
     try {
       const apiUrl = process.env.REACT_APP_API_URL;
@@ -41,6 +42,7 @@ const SignIn = () => {
       <Row className="justify-content-center">
         {/* Sign Up Form */}
         <Col md={5} className="p-4 shadow bg-white rounded mx-2" style={{ position: 'relative' }}>
+        {user?.name||""}
           <h3 className="mb-4 text-center">Sign Up</h3>
           <Form onSubmit={handleSubmitSignUp(onSignUpSubmit)}>
             <Form.Group className="mb-3" controlId="formSignUpName">
