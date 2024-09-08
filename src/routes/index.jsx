@@ -1,10 +1,11 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { PrivateRoute } from "./Auth/PrivateRoute";
-import { PublicRoute } from "./Auth/PublicRoute";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import { PrivateRoute } from "./auth/PrivateRoute";
+import { PublicRoute } from "./auth/PublicRoute";
 import SignIn from "../pages/auth/SignIn";
 import SignUp from "../pages/auth/SignUp";
 import HomePage from "../pages/afterLogin/home/HomePage";
 import { PrivateRouteName, PublicRouteName } from "../utils/routesName";
+
 export const RoutesPage = () => {
   const PublicRoutes = [
     {
@@ -21,52 +22,16 @@ export const RoutesPage = () => {
       path: PrivateRouteName.HOME,
       component: HomePage,
     },
-    // {
-    //   path: "/SignUp",
-    //   component: SignUp,
-    // },
   ];
 
   return (
     <Router>
       <Routes>
-        {/* <Route
-          path="/home"
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/user-details/:userId/user"
-          element={
-            <PrivateRoute>
-              <UserDetails />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/registration"
-          element={
-            <PublicRoute>
-              <Registration />
-            </PublicRoute>
-          }
-        /> */}
-        {/* <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <SignIn />
-            </PublicRoute>
-          }
-        /> */}
-
-        {PublicRoutes?.map((routesItem) => {
+        {PublicRoutes?.map((routesItem, index) => {
           const { path, component: Component } = routesItem || "";
           return (
             <Route
+              key={index}
               path={path}
               element={
                 <PublicRoute>
@@ -77,10 +42,11 @@ export const RoutesPage = () => {
           );
         })}
 
-        {PrivateRoutes?.map((routesItem) => {
+        {PrivateRoutes?.map((routesItem, index) => {
           const { path, component: Component } = routesItem || "";
           return (
             <Route
+              key={index}
               path={path}
               element={
                 <PrivateRoute>
@@ -90,6 +56,9 @@ export const RoutesPage = () => {
             />
           );
         })}
+        
+        {/* Redirect from root to sign-in page */}
+        <Route path="/" element={<Navigate to={PublicRouteName.SIGNIN} replace />} />
       </Routes>
     </Router>
   );

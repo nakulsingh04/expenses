@@ -1,9 +1,9 @@
 export const PublicRouteName={
-    SIGNIN:"/signIn",
-    SIGNUP:"/signUP"
+    SIGNIN:"/sign-in",
+    SIGNUP:"/sign-up"
 }
 
-export const PrivateRouteName={
-    HOME:"/home",
+export const PrivateRouteName = {
+    HOME:"/dashboard",
     // SIGNUP:"/signUP"
 }
